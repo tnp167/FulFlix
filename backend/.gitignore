@@ -1,0 +1,32 @@
+# .NET Core
+*.dll
+*.exe
+*.pdb
+*.dbmdl
+*.log
+
+# ASP.NET Core
+wwwroot/
+appsettings*.json
+*.sqlite
+*.db
+
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# IDE and editor folders
+.vs/
+.idea/
+
+# Node modules (if using Node.js for front-end)
+node_modules/
+
+# Logs
+*.log
