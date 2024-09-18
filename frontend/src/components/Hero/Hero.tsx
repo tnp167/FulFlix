@@ -1,4 +1,3 @@
-import { TextGenerateEffect } from "../ui/text-generate-effect";
 import { Vortex } from "../ui/vortex";
 import { motion } from "framer-motion";
 import Autoplay from "embla-carousel-autoplay";
@@ -16,7 +15,7 @@ export function Hero() {
       opts={{ loop: true }}
       plugins={[
         Autoplay({
-          delay: 5000,
+          delay: 3000,
         }),
       ]}
       className="bg-black"
