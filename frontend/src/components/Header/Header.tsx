@@ -25,7 +25,7 @@ const links = [
 
 const Header = () => {
   return (
-    <header className="py-6 xl:py-7 bg-primary text-secondary">
+    <header className="py-4 xl:py-5 bg-primary text-secondary">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/">
           <img src={fullflix} className="w-36 h-auto" />
