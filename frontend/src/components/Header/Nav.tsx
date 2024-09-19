@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import SignUp from "../SignUp/SignUp";
 
 type linkProps = {
   name: string;
@@ -10,28 +11,20 @@ const Nav = ({ links }: { links: linkProps[] }) => {
   return (
     <nav className="text-secondary flex gap-[50px] text-lg">
       {links?.map((link, index) => {
-        const isLink = link.path === "/films" || link.path === "/cinemas";
-
-        return isLink ? (
+        return (
           <Link
             to={link.path}
             key={index}
             className={`${
               link.path === location.pathname &&
-              "border-b-2 border-secondary hover:text-primary transition-all"
+              "border-b-2 border-secondary hover:text-white transition-all"
             }font-medium hover:text-accent transition-all`}
           >
             {link.name}
           </Link>
-        ) : (
-          <span
-            key={index}
-            className="cursor-pointer font-medium hover:text-accent transition-all"
-          >
-            {link.name}
-          </span>
         );
       })}
+      <SignUp />
     </nav>
   );
 };

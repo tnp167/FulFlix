@@ -18,6 +18,71 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+.PhoneInputInput {
+  background-color: transparent;
+  padding-left: 0.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: solid rgb(255 255 255 / 0.6) 1px;
+  transition: border-color 300ms ease-in-out;
+}
+
+.PhoneInputInput:focus-visible {
+  outline: none;
+  border-color: rgb(255, 217, 0);
+  transition: none;
+}
+
+.PhoneInputInput:hover {
+  border-color: rgb(255 255 255 / 1);
+}
+
+.custom-box:hover {
+  box-shadow: 0 0 25px 0 rgba(146, 30, 247, 0.35),
+    inset 0 0 10px 0 rgba(181, 61, 255, 0.3);
+}
+
+.select__single-value {
+  color: rgb(255, 217, 0) !important;
+}
+
+.select__control {
+  border-width: 0 !important;
+  border-bottom: solid 1px rgb(255 255 255 / 0.6) !important;
+  border-radius: 0px !important;
+  background-color: transparent !important;
+}
+
+.select__control:hover {
+  border-bottom: solid 1px rgb(255 255 255 / 1) !important;
+}
+
+.select__indicator-separator {
+  width: 0 !important;
+}
+.select__control--is-focused {
+  box-shadow: none !important;
+  border-color: rgb(255, 217, 0) !important;
+}
+
+.select__menu {
+  background-color: #5e2a8b !important;
+}
+
+.select__option {
+  color: rgb(255 255 255 / 0.6) !important;
+}
+
+.select__option:hover {
+  background-color: #7d3f8c !important;
+}
+
+.select__option--is-focused {
+  background-color: #5e2a8b !important;
+}
+.select__option--is-selected {
+  background-color: #7d3f8c !important;
+  color: rgb(255, 217, 0) !important;
+}
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);

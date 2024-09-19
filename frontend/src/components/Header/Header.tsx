@@ -13,14 +13,6 @@ const links = [
     name: "Cinemas",
     path: "/cinemas",
   },
-  {
-    name: "Sign Up",
-    path: "/",
-  },
-  {
-    name: "Login",
-    path: "/",
-  },
 ];
 
 const Header = () => {
