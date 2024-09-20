@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import SignUp from "../SignUp/SignUp";
+import Login from "../Login/Login";
 type linkProps = {
   name: string;
   path: string;
@@ -39,7 +40,10 @@ const MobileNav = ({ links }: { links: linkProps[] }) => {
               </span>
             );
           })}
-          <SignUp />
+          <div className="mt-10 flex flex-col gap-[50px]">
+            <SignUp />
+            <Login />
+          </div>
         </nav>
       </SheetContent>
     </Sheet>

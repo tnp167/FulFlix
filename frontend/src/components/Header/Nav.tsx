@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import SignUp from "../SignUp/SignUp";
+import Login from "../Login/Login";
 
 type linkProps = {
   name: string;
@@ -24,7 +25,10 @@ const Nav = ({ links }: { links: linkProps[] }) => {
           </Link>
         );
       })}
-      <SignUp />
+      <div className="ml-5 flex gap-[20px]">
+        <SignUp />
+        <Login />
+      </div>
     </nav>
   );
 };
