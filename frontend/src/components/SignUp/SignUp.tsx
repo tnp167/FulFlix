@@ -95,7 +95,7 @@ const SignUp = () => {
                   placeholder="Select a primary fulflix"
                 />
 
-                <div className="flex flex-col md:flex-row  gap-2">
+                <div className="flex flex-col mdflex-row gap-2">
                   <CustomFormField
                     fieldType={FormFieldType.DATE_PICKER}
                     control={form.control}
