@@ -14,14 +14,7 @@ import PhoneInput from "react-phone-number-input";
 import { E164Number } from "libphonenumber-js/core";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {
-  Select,
-  SelectContent,
-  SelectValue,
-  SelectTrigger,
-  SelectItem,
-  DelayedSelect,
-} from "./ui/select";
+import { Select, SelectContent, SelectValue, SelectTrigger } from "./ui/select";
 import { default as ReactSelect } from "react-select";
 
 import { Checkbox } from "./ui/checkbox";
@@ -33,6 +26,7 @@ const location = [
   { value: "Birmingham", label: "Birmingham" },
   { value: "Nottingham", label: "Nottingham" },
 ];
+
 interface CustomProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>;
@@ -45,27 +39,26 @@ interface CustomProps {
   disabled?: boolean;
   dateFormat?: string;
   showTimeSelect?: boolean;
+  type?: string;
   children?: React.ReactNode;
+  passwordErrors?: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const RenderField = ({
-  field,
-  props,
-  children,
-}: {
-  field: any;
-  props: CustomProps;
-  children?: React.ReactNode;
-}) => {
-  const { fieldType, placeholder } = props;
+const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
+  const { type, fieldType, placeholder } = props;
 
   switch (fieldType) {
     case FormFieldType.INPUT:
       return (
         <div className="flex rounded-md">
           <FormControl>
-            <Input placeholder={placeholder} {...field} className="text-base" />
+            <Input
+              placeholder={placeholder}
+              type={type}
+              {...field}
+              className="text-base"
+            />
           </FormControl>
         </div>
       );
@@ -86,14 +79,14 @@ const RenderField = ({
     case FormFieldType.DATE_PICKER:
       return (
         <div className="flex rounded-md bg-transparent">
-          <Calendar className="w-6 h-6 mr-5" />
-          <FormControl>
+          <Calendar className="w-6 h-6 mr-5 flex-2 flex-shrink-0" />
+          <FormControl className="w-full flex-1">
             <DatePicker
               selected={field.value}
               onChange={(date) => field.onChange(date)}
               dateFormat="dd/MM/yyyy"
               wrapperClassName="date-picker"
-              className="bg-transparent w-full border-b pb-2 border-white/60 hover:border-white/100 outline-none overflow-hidden focus-visible:border-secondary transition-colors ease-in-out duration-300"
+              className="bg-transparent w-full border-b pb-2 border-white/60 hover:border-white/100 outline-none focus-visible:border-secondary transition-colors ease-in-out duration-300"
             />
           </FormControl>
         </div>
@@ -125,14 +118,12 @@ const RenderField = ({
                 className="shad-select-trigger"
                 onClick={(e) => {
                   e.stopPropagation();
-                  console.log("Trigger");
                 }}
               >
                 <SelectValue
                   placeholder={placeholder}
                   onClick={(e) => {
                     e.stopPropagation();
-                    console.log("Trigger");
                   }}
                 />
               </SelectTrigger>
@@ -141,7 +132,6 @@ const RenderField = ({
               className=""
               onClick={(e) => {
                 e.stopPropagation();
-                console.log("Trigger");
               }}
             >
               {props.children}
@@ -151,17 +141,15 @@ const RenderField = ({
       );
     case FormFieldType.REACTSELECT:
       return (
-        <ReactSelect
-          onChange={field.onChange}
-          defaultValue={field.value}
-          options={location}
-          classNamePrefix="select"
-          classNames={{
-            control: (state) =>
-              state.isFocused ? "border-red-600" : "border-grey-300",
-          }}
-          placeholder="Select your primary fulflix"
-        />
+        <FormControl>
+          <ReactSelect
+            options={location}
+            classNamePrefix="select"
+            placeholder="Select your primary location"
+            value={location.find((option) => option.value === field.value)}
+            onChange={(selectedOption) => field.onChange(selectedOption!.value)}
+          />
+        </FormControl>
       );
     default:
       break;
@@ -169,7 +157,7 @@ const RenderField = ({
 };
 
 const CustomFormField = (props: CustomProps) => {
-  const { control, fieldType, name, label } = props;
+  const { passwordErrors, control, fieldType, name, label } = props;
   return (
     <FormField
       control={control}
@@ -181,7 +169,17 @@ const CustomFormField = (props: CustomProps) => {
           )}
           <RenderField field={field} props={props} />
 
-          <FormMessage className="shad-error" />
+          {!passwordErrors && <FormMessage />}
+
+          {passwordErrors &&
+            passwordErrors.split("  ").map((err, index) => (
+              <p
+                className="text-[0.8rem] font-medium text-destructive"
+                key={index}
+              >
+                {err}
+              </p>
+            ))}
         </FormItem>
       )}
     />

@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
+import SignUp from "../SignUp/SignUp";
 type linkProps = {
   name: string;
   path: string;
@@ -38,6 +39,7 @@ const MobileNav = ({ links }: { links: linkProps[] }) => {
               </span>
             );
           })}
+          <SignUp />
         </nav>
       </SheetContent>
     </Sheet>
