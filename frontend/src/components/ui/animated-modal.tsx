@@ -159,16 +159,7 @@ export const ModalFooter = ({
   children: ReactNode;
   className?: string;
 }) => {
-  return (
-    <div
-      className={cn(
-        "flex justify-end p-4 bg-gray-100 dark:bg-neutral-900",
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
+  return <div className={cn("flex ", className)}>{children}</div>;
 };
 
 const Overlay = ({ className }: { className?: string }) => {

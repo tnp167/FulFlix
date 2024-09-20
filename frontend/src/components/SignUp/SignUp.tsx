@@ -2,6 +2,7 @@ import {
   Modal,
   ModalBody,
   ModalContent,
+  ModalFooter,
   ModalTrigger,
 } from "../ui/animated-modal";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +14,7 @@ import CustomFormField from "../CustomFormfield";
 import { FormFieldType } from "@/types/formFieldType";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import Socials from "../Social/Social";
 
 const SignUp = () => {
   const [type, setType] = useState("password");
@@ -156,13 +158,16 @@ const SignUp = () => {
 
                 <button
                   type="submit"
-                  className=" inline-flex w-full h-12 animate-shimmer items-center justify-center rounded-md border border-none bg-[linear-gradient(110deg,#5e2a8b,45%,#7d3f8c,55%,#5e2a8b)] bg-[length:200%_100%] px-6 font-medium text-secondary  focus:outline-none transition-all custom-box"
+                  className=" inline-flex w-full h-14 animate-shimmer items-center justify-center rounded-md border border-none bg-[linear-gradient(110deg,#5e2a8b,45%,#7d3f8c,55%,#5e2a8b)] bg-[length:200%_100%] px-6 font-medium text-secondary  focus:outline-none transition-all custom-box"
                 >
                   Sign up
                 </button>
               </form>
             </Form>
           </ModalContent>
+          <ModalFooter>
+            <Socials />
+          </ModalFooter>
         </ModalBody>
       </Modal>
     </div>

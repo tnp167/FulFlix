@@ -14,6 +14,9 @@ export default {
         spotlight: "spotlight 2s ease .75s 1 forwards",
         shimmer: "shimmer 2s linear infinite",
       },
+      translate: {
+        "-50": "-50%",
+      },
       keyframes: {
         spotlight: {
           "0%": {
