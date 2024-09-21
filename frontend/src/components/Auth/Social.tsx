@@ -11,11 +11,11 @@ const Socials = () => {
         </span>
       </div>
       <div className="flex flex-col items-center w-full gap-8">
-        <Button className="flex h-12 w-full bg-[white]/90 gap-4">
+        <Button className="flex h-12 w-full bg-[white]/90 hover:bg-[white]/80 gap-4 transition-all duration-200 ease-in-out">
           <p className="text-lg text-black">Sign in with Google</p>
           <FcGoogle className="w-6 h-6" />
         </Button>
-        <Button className="flex h-12 w-full  bg-[#1877F2] hover:bg-yellow-200 gap-4">
+        <Button className="flex h-12 w-full bg-[#1877F2] hover:bg-[#1877F2]/80 gap-4 transition-all duration-200 ease-in-out">
           <p className="text-lg">Sign in with Facebook</p>
           <SiFacebook className="w-6 h-6 rounded-xl bg-white text-[#0866FF] " />
         </Button>

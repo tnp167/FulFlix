@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-// import Nav from "./Nav";
 import MobileNav from "./MobileNav";
 import Nav from "./Nav";
 import fullflix from "@/assets/logo/fulflix.png";
