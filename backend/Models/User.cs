@@ -33,9 +33,6 @@ namespace backend.Models
 
         public string? Image { get; set; }
 
-        [MaxLength(256)]
-        public required string Password { get; set; } 
-
         public List<Role> Roles { get; set; } = new List<Role>();
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
