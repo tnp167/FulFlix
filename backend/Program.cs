@@ -16,7 +16,6 @@ using System.Net.Http.Headers;
 Env.Load();
 
 var auth0Domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN");
-var auth0Audience = Environment.GetEnvironmentVariable("AUTH0_AUDIENCE");
 var managementApiToken = Environment.GetEnvironmentVariable("MANAGEMENT_API_TOKEN");
 
 var builder = WebApplication.CreateBuilder(args);

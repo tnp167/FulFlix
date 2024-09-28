@@ -37,45 +37,77 @@ namespace backend.Services
             return auth0UserResponse;
          }
 
-    public async Task<bool> AssignRoleToUserAsync(string userId, string roleName)
-    {
-        var roleId = await GetRoleIdByNameAsync(roleName);
-        
-        if (roleId == null)
+        public async Task<bool> AssignRoleToUserAsync(string userId, string roleName)
         {
-            throw new Exception($"Role '{roleName}' not found in Auth0.");
+            var roleId = await GetRoleIdByNameAsync(roleName);
+            
+            if (roleId == null)
+            {
+                throw new Exception($"Role '{roleName}' not found in Auth0.");
+            }
+
+            var content = new StringContent(JsonConvert.SerializeObject(new { roles = new[] { roleId } }), Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync($"api/v2/users/{userId}/roles", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Failed to assign role in Auth0: {errorContent}");
+            }
+
+            return response.IsSuccessStatusCode;
         }
 
-        var content = new StringContent(JsonConvert.SerializeObject(new { roles = new[] { roleId } }), Encoding.UTF8, "application/json");
-
-        var response = await _httpClient.PostAsync($"api/v2/users/{userId}/roles", content);
-
-        if (!response.IsSuccessStatusCode)
+        private async Task<string?> GetRoleIdByNameAsync(string roleName)
         {
-            var errorContent = await response.Content.ReadAsStringAsync();
-            throw new Exception($"Failed to assign role in Auth0: {errorContent}");
+            var response = await _httpClient.GetAsync("api/v2/roles");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Error fetching roles from Auth0: {errorContent}");
+            }
+
+            var rolesJson = await response.Content.ReadAsStringAsync();
+            var roles = JsonConvert.DeserializeObject<List<Auth0RoleDto>>(rolesJson);
+
+            var role = roles?.FirstOrDefault(r => r.Name.Equals(roleName, StringComparison.OrdinalIgnoreCase));
+            return role?.Id;
         }
 
-        return response.IsSuccessStatusCode;
-    }
 
-    private async Task<string?> GetRoleIdByNameAsync(string roleName)
-    {
-        var response = await _httpClient.GetAsync("api/v2/roles");
+        public async Task<string?> LoginAuth0UserAsync(string email, string password){
 
-        if (!response.IsSuccessStatusCode)
-        {
-            var errorContent = await response.Content.ReadAsStringAsync();
-            throw new Exception($"Error fetching roles from Auth0: {errorContent}");
+            var domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN");
+            var clientId = Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID");
+            var audience = Environment.GetEnvironmentVariable("AUTH0_AUDIENCE");
+            var clientSecret = Environment.GetEnvironmentVariable("AUTH0_CLIENT_SECRET");
+
+            var requestData = new Dictionary<string, string>
+            {
+                { "grant_type", "password" },
+                { "username", email },
+                { "password", password },
+                { "audience", audience! },
+                { "client_id", clientId! },
+                { "client_secret", clientSecret!},
+                { "connection", "Username-Password-Authentication" } 
+            };
+
+            var content = new FormUrlEncodedContent(requestData);
+            var response = await _httpClient.PostAsync($"https://{domain}/oauth/token", content);
+
+            if(!response.IsSuccessStatusCode){
+                var errorContent = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Error during login: {errorContent}");
+            }
+
+              var responseJson = await response.Content.ReadAsStringAsync();
+              var tokenResponse = JsonConvert.DeserializeObject<Auth0TokenResponse>(responseJson);
+
+              return tokenResponse?.AccessToken;  
         }
-
-        var rolesJson = await response.Content.ReadAsStringAsync();
-        var roles = JsonConvert.DeserializeObject<List<Auth0RoleDto>>(rolesJson);
-
-        var role = roles?.FirstOrDefault(r => r.Name.Equals(roleName, StringComparison.OrdinalIgnoreCase));
-        return role?.Id;
-    }
-
 
     }
 }

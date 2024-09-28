@@ -18,9 +18,14 @@ namespace backend.GraphQL
             _userService = userService;  
          }
 
-         public async Task<UserDto?> CreateUser(CreateUserDto createUserDto)
+        public async Task<UserDto?> CreateUser(CreateUserDto createUserDto)
         {
             return await _userService.CreateUserAsync(createUserDto);
+        }
+
+        public async Task<string?> LoginUser(LoginUserDto loginUserDto)
+        {
+            return  await _userService.LoginUserAsync(loginUserDto);
         }
     }
 }
