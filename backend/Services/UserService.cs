@@ -89,5 +89,17 @@ namespace backend.Services
 
             return token;
         }
+
+       //Get User
+       public async Task<UserDto?> GetUserProfileAsync(string auth0Id)
+       {
+            var auth0user = await _userRepository.GetUserByAuth0IdAsync(auth0Id);
+            if (auth0user == null)
+            {
+                throw new Exception("User not found.");
+            }
+
+            return _mapper.Map<UserDto>(user);
+      }
     }
 }

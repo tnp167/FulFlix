@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using AutoMapper;
+using HotChocolate;
 using HotChocolate.AspNetCore;
+using HotChocolate.Authorization;
 using backend.Data;
 using DotNetEnv;
 using backend.Interfaces;
@@ -26,9 +28,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
            .LogTo(Console.WriteLine, LogLevel.Information)); 
 
 builder.Services.AddGraphQLServer()
+    .AddAuthorization()
     .AddQueryType<UserQuery>()
-    .AddMutationType<UserMutation>() 
-    .AddAuthorization();
+    .AddMutationType<UserMutation>();
 
 builder.Services.AddAuthentication(options =>
 {

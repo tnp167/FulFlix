@@ -10,5 +10,6 @@ namespace backend.Interfaces
     {
         Task<UserDto?> CreateUserAsync(CreateUserDto createUserDto);
         Task<string?> LoginUserAsync (LoginUserDto loginUserDto);
+        Task<UserDto?> GetUserProfileAsync(string auth0Id);
     }
 }
