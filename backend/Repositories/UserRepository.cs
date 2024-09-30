@@ -17,7 +17,7 @@ namespace backend.Repositories
         private readonly IMapper _mapper;
         public UserRepository(ApplicationDbContext context, IMapper mapper)
         {
-             _context = context;
+              _context = context;
               _mapper = mapper;
         }
         public async Task<User> CreateUserAsync(User user)
@@ -34,6 +34,13 @@ namespace backend.Repositories
         public async Task<User?> GetUserByAuth0IdAsync(string auth0Id)
         {   
             return await _context.Users.FirstOrDefaultAsync(u => u.Auth0Id == auth0Id);
+        }
+
+        public async Task UpdateUserAsync(User user)
+        {
+      
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
         }
     }
 }

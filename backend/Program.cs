@@ -12,9 +12,12 @@ using backend.Data;
 using DotNetEnv;
 using backend.Interfaces;
 using backend.GraphQL;
+using backend.GraphQL.Queries;
+using backend.GraphQL.Mutations;
 using backend.Repositories;
 using backend.Services;
 using System.Net.Http.Headers;
+using Resend;
 Env.Load();
 
 var auth0Domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN");
@@ -29,8 +32,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddGraphQLServer()
     .AddAuthorization()
-    .AddQueryType<UserQuery>()
-    .AddMutationType<UserMutation>();
+    .AddQueryType(d => d.Name("Query"))
+        .AddType<UserQuery>()
+        .AddType<EmailQuery>()
+    .AddMutationType(d => d.Name("Mutation"))
+        .AddType<UserMutation>()
+        .AddType<EmailMutation>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -57,6 +64,14 @@ builder.Services.AddHttpClient<IAuth0Client, Auth0Client>(client =>
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
+builder.Services.AddOptions();
+builder.Services.AddHttpClient<ResendClient>();
+builder.Services.Configure<ResendClientOptions>( o =>
+{
+    o.ApiToken = Environment.GetEnvironmentVariable("RESEND_APITOKEN")!;
+} );
+builder.Services.AddTransient<IResend, ResendClient>();
+
 
 builder.Services.AddAuthorization(options =>
 {
@@ -68,6 +83,8 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IEmailTokenRepository, EmailTokenRepository>();
 
 var app = builder.Build();
 

@@ -12,5 +12,6 @@ namespace backend.Interfaces
         Task<User> CreateUserAsync(User user);
         Task<User?> GetUserByEmailAsync(string email);
         Task<User?> GetUserByAuth0IdAsync(string auth0Id);
+        Task UpdateUserAsync(User user);
     }
 }

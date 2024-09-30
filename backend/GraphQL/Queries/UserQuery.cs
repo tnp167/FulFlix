@@ -8,25 +8,26 @@ using System.Security.Claims;
 
 namespace backend.GraphQL{
 
-public class UserQuery
-{
-    private readonly IUserService _userService; 
-    public UserQuery(IUserService userService)
+    [ExtendObjectType("Query")]
+    public class UserQuery
     {
-        _userService = userService;
-    }
-
-    [GraphQLName("user")]
-    public async Task<UserDto?> GetUserProfile([Service] IUserService userService, ClaimsPrincipal claimsPrincipal)
-    {
-        var auth0Id = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (auth0Id == null)
+        private readonly IUserService _userService; 
+        public UserQuery(IUserService userService)
         {
-            throw new Exception("Invalid token.");
+            _userService = userService;
         }
 
-        return await userService.GetUserProfileAsync(auth0Id);
+        [GraphQLName("user")]
+        public async Task<UserDto?> GetUserProfile([Service] IUserService userService, ClaimsPrincipal claimsPrincipal)
+        {
+            var auth0Id = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (auth0Id == null)
+            {
+                throw new Exception("Invalid token.");
+            }
+
+            return await userService.GetUserProfileAsync(auth0Id);
+        }
     }
-}
 
 }

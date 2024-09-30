@@ -10,6 +10,7 @@ using backend.DTOs;
 
 namespace backend.GraphQL
 {
+    [ExtendObjectType("Mutation")]
     public class UserMutation
     {
          private readonly IUserService _userService;

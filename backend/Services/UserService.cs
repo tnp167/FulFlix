@@ -7,6 +7,7 @@ using backend.Repositories;
 using backend.DTOs;
 using backend.Models;
 using AutoMapper;
+using Newtonsoft.Json;
 
 namespace backend.Services
 {
@@ -44,6 +45,8 @@ namespace backend.Services
                 Password = createUserDto.Password,
                 UserMetadata = userMetadata 
             });
+
+            Console.WriteLine(JsonConvert.SerializeObject(auth0UserResponse, Formatting.Indented));
 
             if (auth0UserResponse == null)
             {
@@ -99,7 +102,7 @@ namespace backend.Services
                 throw new Exception("User not found.");
             }
 
-            return _mapper.Map<UserDto>(user);
+            return _mapper.Map<UserDto>(auth0user);
       }
     }
 }
