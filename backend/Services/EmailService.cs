@@ -27,5 +27,6 @@ namespace backend.Services
 
             await _resend.EmailSendAsync(message);
         }
+
     }
 }

@@ -35,9 +35,11 @@ builder.Services.AddGraphQLServer()
     .AddQueryType(d => d.Name("Query"))
         .AddType<UserQuery>()
         .AddType<EmailQuery>()
+         .AddType<PasswordQuery>()
     .AddMutationType(d => d.Name("Mutation"))
         .AddType<UserMutation>()
-        .AddType<EmailMutation>();
+        .AddType<EmailMutation>()
+        .AddType<PasswordMutation>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -85,6 +87,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IEmailTokenRepository, EmailTokenRepository>();
+builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
+builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
 
 var app = builder.Build();
 

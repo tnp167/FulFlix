@@ -41,12 +41,12 @@ namespace backend.Services
             return auth0UserResponse;
          }
 
-        private async Task<string> GetManagementApiTokenAsync()
+        public async Task<string> GetManagementApiTokenAsync()
         {
-            var domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN");
-            var clientId = Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID");
-            var audience = Environment.GetEnvironmentVariable("AUTH0_AUDIENCE");
-            var clientSecret = Environment.GetEnvironmentVariable("AUTH0_CLIENT_SECRET");
+            var domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN")!;
+            var clientId = Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID")!;
+            var audience = Environment.GetEnvironmentVariable("AUTH0_AUDIENCE")!;
+            var clientSecret = Environment.GetEnvironmentVariable("AUTH0_CLIENT_SECRET")!;
 
             var requestData = new Dictionary<string, string>
             {
