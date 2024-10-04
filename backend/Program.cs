@@ -66,6 +66,7 @@ builder.Services.AddHttpClient<IAuth0Client, Auth0Client>(client =>
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 });
 
+builder.Services.AddHttpClient<IPasswordResetService, PasswordResetService>();
 builder.Services.AddOptions();
 builder.Services.AddHttpClient<ResendClient>();
 builder.Services.Configure<ResendClientOptions>( o =>

@@ -28,7 +28,7 @@ namespace backend.Services
         {
             var auth0Domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN")!;
             var auth0Token = await _auth0Client.GetManagementApiTokenAsync();
-            var request = new HttpRequestMessage(HttpMethod.Patch, $"{auth0Domain}/api/v2/users/{auth0Id}");
+            var request = new HttpRequestMessage(HttpMethod.Patch, $"https://{auth0Domain}/api/v2/users/{auth0Id}");
             request.Headers.Add("Authorization", $"Bearer {auth0Token}");
 
             var body = new
@@ -38,7 +38,6 @@ namespace backend.Services
             };
 
             request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
-
             var response = await _httpClient.SendAsync(request);
             return response.IsSuccessStatusCode;
         }
