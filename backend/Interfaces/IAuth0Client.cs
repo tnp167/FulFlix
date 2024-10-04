@@ -11,5 +11,6 @@ namespace backend.Interfaces
          Task<Auth0UserResponseDto?> CreateAuth0UserAsync(Auth0UserRequestDto request);
          Task<bool> AssignRoleToUserAsync(string userId, string roleName);
          Task<string?> LoginAuth0UserAsync (string email, string password);
+         Task<string> GetManagementApiTokenAsync();
     }
 }
