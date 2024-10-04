@@ -116,3 +116,17 @@
 .read-the-docs {
   color: #888;
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(260, 39%, 17%);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #7d3f8c;
+  border-radius: 5px;
+}

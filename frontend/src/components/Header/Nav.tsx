@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import SignUp from "../SignUp/SignUp";
+import AuthModal from "../Auth/AuthModal";
 
 type linkProps = {
   name: string;
@@ -18,13 +18,15 @@ const Nav = ({ links }: { links: linkProps[] }) => {
             className={`${
               link.path === location.pathname &&
               "border-b-2 border-secondary hover:text-white transition-all"
-            }font-medium hover:text-accent transition-all`}
+            }font-medium hover:text-accent transition-all flex items-center`}
           >
             {link.name}
           </Link>
         );
       })}
-      <SignUp />
+      <div className="ml-5 flex gap-[20px]">
+        <AuthModal />
+      </div>
     </nav>
   );
 };

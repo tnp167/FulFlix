@@ -42,18 +42,26 @@ export function Modal({ children }: { children: ReactNode }) {
 export const ModalTrigger = ({
   children,
   className,
+  onClick,
 }: {
   children: ReactNode;
   className?: string;
+  onClick?: () => void;
 }) => {
   const { setOpen } = useModal();
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    }
+    setOpen(true);
+  };
   return (
     <button
       className={cn(
         "px-4 py-2 rounded-md text-black dark:text-white text-center relative overflow-hidden",
         className
       )}
-      onClick={() => setOpen(true)}
+      onClick={handleClick}
     >
       {children}
     </button>
@@ -159,16 +167,7 @@ export const ModalFooter = ({
   children: ReactNode;
   className?: string;
 }) => {
-  return (
-    <div
-      className={cn(
-        "flex justify-end p-4 bg-gray-100 dark:bg-neutral-900",
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
+  return <div className={cn("flex ", className)}>{children}</div>;
 };
 
 const Overlay = ({ className }: { className?: string }) => {
