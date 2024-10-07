@@ -22,9 +22,17 @@ namespace backend.DTOs
 
         public bool EmailVerified { get; set; }
 
-        public string? Image { get; set; }
+        public string? Picture { get; set; } 
 
         public List<Role> Roles { get; set; } = new List<Role>();
+
+        public string? Location { get; set; }
+
+        public DateTime? BirthDate { get; set; } 
+
+        public string? Phone { get; set; }
+
+        public bool PrivacyConsent { get; set; } = false; 
 
         public DateTime CreatedAt { get; set; }
 
@@ -43,6 +51,15 @@ namespace backend.DTOs
 
         [MaxLength(256)]
         public required string Password { get; set; } 
+
+        public string? Location { get; set; } 
+
+        public DateTime? BirthDate { get; set; } 
+
+        public bool PrivacyConsent { get; set; } = false; 
+
+        [Phone]
+        public string? Phone { get; set; }
     }
 
    public class Auth0UserRequestDto
@@ -70,6 +87,9 @@ namespace backend.DTOs
 
         [JsonProperty("user_metadata")]
         public required Auth0UserMetadataDto UserMetadata { get; set; }
+
+        [JsonProperty("picture")]
+        public string? Picture { get; set; } 
 
         [JsonProperty("email_verified")]
         public bool EmailVerified { get; set; }

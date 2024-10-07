@@ -22,7 +22,7 @@ namespace backend.GraphQL
         [GraphQLName("createUser")]
         public async Task<UserDto?> CreateUser(CreateUserDto createUserDto)
         {
-            return await _userService.CreateUserAsync(createUserDto);
+            return await _userService.CreateUserAsync(createUserDto);           
         }
 
         [GraphQLName("loginUser")]
@@ -30,5 +30,12 @@ namespace backend.GraphQL
         {
             return  await _userService.LoginUserAsync(loginUserDto);
         }
+
+        [GraphQLName("Try")]
+        public async Task<string> Try()
+        {
+            return "Hello, world!";       
+        }
+
     }
 }

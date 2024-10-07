@@ -31,9 +31,17 @@ namespace backend.Models
 
         public bool EmailVerified { get; set; } = false;
 
-        public string? Image { get; set; }
+        public string? Picture { get; set; }
 
         public List<Role> Roles { get; set; } = new List<Role>();
+
+        public string? Location { get; set; }
+
+        public DateTime? BirthDate { get; set; } 
+
+        public string? Phone { get; set; }
+
+        public bool? PrivacyConsent { get; set; } = false; 
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

@@ -69,11 +69,15 @@ namespace backend.Services
                 FirstName = createUserDto.FirstName,
                 LastName = createUserDto.LastName,
                 EmailVerified = false,
+                Picture = auth0UserResponse.Picture,
                 Roles = new List<Role> { Role.User },
+                Location = createUserDto.Location, 
+                BirthDate = createUserDto.BirthDate,
+                Phone = createUserDto.Phone,
+                PrivacyConsent = createUserDto.PrivacyConsent,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
             };
-
 
             await _userRepository.CreateUserAsync(newUser);
 

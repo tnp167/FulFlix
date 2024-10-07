@@ -18,8 +18,12 @@ namespace backend.GraphQL.Types
             descriptor.Field(x => x.LastName);
             descriptor.Field(x => x.Email);
             descriptor.Field(x => x.EmailVerified);
-            descriptor.Field(x => x.Image);
+            descriptor.Field(x => x.Picture);
             descriptor.Field(x => x.Roles);
+            descriptor.Field(x => x.Location);
+            descriptor.Field(x => x.BirthDate);
+            descriptor.Field(x => x.Phone);
+            descriptor.Field(x => x.PrivacyConsent);
             descriptor.Field(x => x.CreatedAt);
             descriptor.Field(x => x.UpdatedAt);
         }
