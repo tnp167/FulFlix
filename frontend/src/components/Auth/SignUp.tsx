@@ -8,6 +8,10 @@ import CustomFormField from "../CustomFormfield";
 import { FormFieldType } from "@/types/formFieldType";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/userSlice";
+import { SIGN_UP } from "@/graphql/mutations/signUpMutation";
 
 const SignUp = ({
   setModalType,
@@ -16,6 +20,7 @@ const SignUp = ({
 }) => {
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<Eye />);
+  const dispatch = useDispatch();
 
   const handleToggle = () => {
     if (type === "password") {
@@ -39,8 +44,19 @@ const SignUp = ({
       password: "",
       confirmPassword: "",
       location: undefined,
+      phone: "",
       birthDate: new Date(Date.now()),
       privacyConsent: false,
+    },
+  });
+
+  const [signUp] = useMutation(SIGN_UP, {
+    onCompleted(data) {
+      console.log("User created successfully:", data.createUser);
+      dispatch(setUser(data.createUser));
+    },
+    onError(err) {
+      console.error("Error signing up:", err);
     },
   });
 
@@ -49,6 +65,18 @@ const SignUp = ({
   const onSubmit = async (data: z.infer<typeof SignUpSchema>) => {
     try {
       console.log("Form submitted:", data);
+      await signUp({
+        variables: {
+          firstName: data.firstname,
+          lastName: data.lastname,
+          email: data.email,
+          password: data.password,
+          location: data.location,
+          birthDate: data.birthDate,
+          phone: data.phone,
+          privacyConsent: data.privacyConsent,
+        },
+      });
     } catch (error) {
       console.error("Form submission error:", error);
     }
