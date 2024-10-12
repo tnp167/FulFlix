@@ -10,6 +10,10 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { LoginSchema } from "@/types/login-schema";
+import { LOGIN } from "@/graphql/mutations/authMutation";
+import { useMutation } from "@apollo/client";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/userSlice";
 
 const Login = ({
   setModalType,
@@ -18,6 +22,8 @@ const Login = ({
 }) => {
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<Eye />);
+  const dispatch = useDispatch();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleToggle = () => {
     if (type === "password") {
@@ -43,9 +49,32 @@ const Login = ({
 
   const passwordErrors = form.formState.errors.password?.message;
 
+  const [login, { loading }] = useMutation(LOGIN, {
+    onCompleted(data) {
+      localStorage.setItem("authToken", data.loginUser);
+      dispatch(setUser({ token: data.loginUser }));
+    },
+    onError(error) {
+      const errorMessage =
+        error.graphQLErrors[0]?.extensions?.message ||
+        "An unexpected error occurred";
+      setErrorMessage(
+        errorMessage && typeof errorMessage === "string"
+          ? errorMessage.includes("Wrong email or password")
+            ? "Invalid email or password"
+            : errorMessage
+          : ""
+      );
+    },
+  });
+
   const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
+    setErrorMessage("");
     try {
       console.log("Form submitted:", data);
+      await login({
+        variables: data,
+      });
     } catch (error) {
       console.error("Form submission error:", error);
     }
@@ -90,8 +119,9 @@ const Login = ({
           <button
             type="submit"
             className=" inline-flex w-full h-14 animate-shimmer items-center justify-center rounded-md border border-none bg-[linear-gradient(110deg,#5e2a8b,45%,#7d3f8c,55%,#5e2a8b)] bg-[length:200%_100%] px-6 font-medium text-secondary  focus:outline-none transition-all custom-box"
+            disabled={loading}
           >
-            Enter
+            {loading ? "Logging in..." : "Log in"}
           </button>
           <div
             onClick={handleRegisterClick}
@@ -99,6 +129,9 @@ const Login = ({
           >
             Not yet a fulflix member?
           </div>
+          {errorMessage && (
+            <p className="text-red-500 text-center">{errorMessage}</p>
+          )}
         </form>
       </Form>
     </ModalContent>

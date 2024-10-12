@@ -212,7 +212,7 @@ const SignUp = ({
 
               <button
                 type="submit"
-                className=" inline-flex w-full h-14 animate-shimmer items-center justify-center rounded-md border border-none bg-[linear-gradient(110deg,#5e2a8b,45%,#7d3f8c,55%,#5e2a8b)] bg-[length:200%_100%] px-6 font-medium text-secondary  focus:outline-none transition-all custom-box"
+                className="inline-flex w-full h-14 animate-shimmer items-center justify-center rounded-md border border-none bg-[linear-gradient(110deg,#5e2a8b,45%,#7d3f8c,55%,#5e2a8b)] bg-[length:200%_100%] px-6 font-medium text-secondary  focus:outline-none transition-all custom-box"
                 disabled={loading}
               >
                 {loading ? "Signing up..." : "Sign up"}
@@ -244,12 +244,6 @@ const SignUp = ({
               Please check your email for a verification link
             </p>
             <div className="flex justify-center mt-14">
-              {/* <button
-                className="inline-flex w-60 h-14 animate-shimmer items-center justify-center rounded-full bg-[#5e2a8b] border border-secondary px-6 font-medium text-secondary hover:scale-110 focus:outline-none transition-all duration-300 ease-in-out"
-                onClick={handleLoginClick}
-              >
-                Go to Login
-              </button> */}
               <button
                 className="px-10 py-3 rounded-full bg-[#5e2a8b] font-semibold text-white tracking-widest uppercase transform hover:scale-105 hover:bg-[#7d3f8c] transition-all duration-200 ease-in-out"
                 onClick={handleLoginClick}

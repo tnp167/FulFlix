@@ -37,3 +37,9 @@ export const SEND_VERIFICATION_EMAIL = gql`
     sendVerificationEmail(email: $email)
   }
 `;
+
+export const LOGIN = gql`
+  mutation Login($email: String!, $password: String!) {
+    loginUser(loginUserDto: { email: $email, password: $password })
+  }
+`;
