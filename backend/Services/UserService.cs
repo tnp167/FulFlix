@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.Interfaces;
-using backend.Repositories;
-using backend.DTOs;
-using backend.Models;
 using AutoMapper;
+using backend.DTOs;
+using backend.Interfaces;
+using backend.Models;
+using backend.Repositories;
 using Newtonsoft.Json;
 
 namespace backend.Services
@@ -16,6 +16,7 @@ namespace backend.Services
         private readonly IUserRepository _userRepository;
         private readonly IAuth0Client _auth0Client;
         private readonly IMapper _mapper;
+
         public UserService(IUserRepository userRepository, IMapper mapper, IAuth0Client auth0Client)
         {
             _userRepository = userRepository;
@@ -29,22 +30,24 @@ namespace backend.Services
             var existingUser = await _userRepository.GetUserByEmailAsync(createUserDto.Email);
             if (existingUser != null)
             {
-                throw new Exception("User already exists.");
+                throw new Exception("User already exists");
             }
 
             var userMetadata = new Auth0UserMetadataDto
             {
                 FirstName = createUserDto.FirstName,
-                LastName = createUserDto.LastName
+                LastName = createUserDto.LastName,
             };
 
             // Create the Auth0 user request
-            var auth0UserResponse = await _auth0Client.CreateAuth0UserAsync(new Auth0UserRequestDto
-            {
-                Email = createUserDto.Email,
-                Password = createUserDto.Password,
-                UserMetadata = userMetadata 
-            });
+            var auth0UserResponse = await _auth0Client.CreateAuth0UserAsync(
+                new Auth0UserRequestDto
+                {
+                    Email = createUserDto.Email,
+                    Password = createUserDto.Password,
+                    UserMetadata = userMetadata,
+                }
+            );
 
             Console.WriteLine(JsonConvert.SerializeObject(auth0UserResponse, Formatting.Indented));
 
@@ -54,13 +57,16 @@ namespace backend.Services
             }
 
             //Assign User role to Auth0 user
-            bool roleAssigned = await _auth0Client.AssignRoleToUserAsync(auth0UserResponse.UserId,"User");
+            bool roleAssigned = await _auth0Client.AssignRoleToUserAsync(
+                auth0UserResponse.UserId,
+                "User"
+            );
 
             if (!roleAssigned)
             {
                 throw new Exception("Failed to assign role to user in Auth0.");
             }
-            
+
             //Store user information in local database
             var newUser = new User
             {
@@ -71,7 +77,7 @@ namespace backend.Services
                 EmailVerified = false,
                 Picture = auth0UserResponse.Picture,
                 Roles = new List<Role> { Role.User },
-                Location = createUserDto.Location, 
+                Location = createUserDto.Location,
                 BirthDate = createUserDto.BirthDate,
                 Phone = createUserDto.Phone,
                 PrivacyConsent = createUserDto.PrivacyConsent,
@@ -84,10 +90,13 @@ namespace backend.Services
             return _mapper.Map<UserDto>(newUser);
         }
 
-        //Login 
-        public async Task<string?> LoginUserAsync (LoginUserDto loginUserDto){
-
-            var token = await _auth0Client.LoginAuth0UserAsync(loginUserDto.Email, loginUserDto.Password);
+        //Login
+        public async Task<string?> LoginUserAsync(LoginUserDto loginUserDto)
+        {
+            var token = await _auth0Client.LoginAuth0UserAsync(
+                loginUserDto.Email,
+                loginUserDto.Password
+            );
 
             if (token == null)
             {
@@ -97,9 +106,9 @@ namespace backend.Services
             return token;
         }
 
-       //Get User
-       public async Task<UserDto?> GetUserProfileAsync(string auth0Id)
-       {
+        //Get User
+        public async Task<UserDto?> GetUserProfileAsync(string auth0Id)
+        {
             var auth0user = await _userRepository.GetUserByAuth0IdAsync(auth0Id);
             if (auth0user == null)
             {
@@ -107,6 +116,6 @@ namespace backend.Services
             }
 
             return _mapper.Map<UserDto>(auth0user);
-      }
+        }
     }
 }

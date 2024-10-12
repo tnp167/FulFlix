@@ -2,42 +2,46 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using backend.Data;
+using backend.DTOs;
 using backend.Interfaces;
 using backend.Models;
-using backend.DTOs;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace backend.Repositories
 {
     public class EmailTokenRepository : IEmailTokenRepository
     {
-        private readonly ApplicationDbContext _context;
-        public EmailTokenRepository(ApplicationDbContext context)
+        private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
+
+        public EmailTokenRepository(IDbContextFactory<ApplicationDbContext> contextFactory)
         {
-            _context = context;
+            _contextFactory = contextFactory;
         }
+
         public async Task CreateEmailTokenAsync(EmailToken token)
         {
-            await _context.EmailTokens.AddAsync(token);
-            await _context.SaveChangesAsync();
+            using var context = await _contextFactory.CreateDbContextAsync();
+            await context.EmailTokens.AddAsync(token);
+            await context.SaveChangesAsync();
         }
 
         public async Task<EmailToken?> GetEmailTokenAsync(string token)
         {
-            return await _context.EmailTokens.FirstOrDefaultAsync(t => t.Token == token);
+            using var context = await _contextFactory.CreateDbContextAsync();
+            return await context.EmailTokens.FirstOrDefaultAsync(t => t.Token == token);
         }
 
         public async Task DeleteEmailTokenAsync(string id)
         {
-            var token = await _context.EmailTokens.FindAsync(id);
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var token = await context.EmailTokens.FindAsync(id);
             if (token != null)
             {
-                _context.EmailTokens.Remove(token);
-                await _context.SaveChangesAsync();
+                context.EmailTokens.Remove(token);
+                await context.SaveChangesAsync();
             }
         }
-
-
     }
 }

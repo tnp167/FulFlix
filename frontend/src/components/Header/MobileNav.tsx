@@ -1,8 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
-import SignUp from "../Auth/SignUp";
-import Login from "../Auth/Login";
 import AuthModal from "../Auth/AuthModal";
 type linkProps = {
   name: string;

@@ -2,25 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext, IDisposable
     {
-        public ApplicationDbContext(DbContextOptions dbContextOptions): base(dbContextOptions)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options) { }
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
+        public DbSet<EmailToken> EmailTokens { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
         }
 
-       public DbSet<User> Users {get; set;}
-       public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
-       public DbSet<EmailToken> EmailTokens { get; set; }
+        public override void Dispose() { }
 
-       protected override void OnModelCreating(ModelBuilder modelBuilder){
-            modelBuilder.Entity<User>()
-            .HasIndex(u => u.Email)
-            .IsUnique();
-       }
+        public override ValueTask DisposeAsync()
+        {
+            return ValueTask.CompletedTask;
+        }
     }
 }

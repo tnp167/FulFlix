@@ -2,39 +2,45 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using backend.Data;
+using backend.DTOs;
 using backend.Interfaces;
 using backend.Models;
-using backend.DTOs;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace backend.Repositories
 {
-    public class PasswordResetTokenRepository: IPasswordResetTokenRepository
+    public class PasswordResetTokenRepository : IPasswordResetTokenRepository
     {
-         private readonly ApplicationDbContext _context;
-         public PasswordResetTokenRepository(ApplicationDbContext context)
-         {
-             _context = context;
-         }
+        private readonly IDbContextFactory<ApplicationDbContext> _contextFactory;
+
+        public PasswordResetTokenRepository(IDbContextFactory<ApplicationDbContext> contextFactory)
+        {
+            _contextFactory = contextFactory;
+        }
+
         public async Task CreatePasswordResetTokenAsync(PasswordResetToken token)
-         {
-            await _context.PasswordResetTokens.AddAsync(token);
-            await _context.SaveChangesAsync();
-         }
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            await context.PasswordResetTokens.AddAsync(token);
+            await context.SaveChangesAsync();
+        }
 
         public async Task<PasswordResetToken?> GetPasswordResetTokenAsync(string token)
         {
-            return await _context.PasswordResetTokens.FirstOrDefaultAsync(t => t.Token == token);
+            using var context = await _contextFactory.CreateDbContextAsync();
+            return await context.PasswordResetTokens.FirstOrDefaultAsync(t => t.Token == token);
         }
 
         public async Task DeletePasswordResetTokenAsync(string id)
         {
-            var token = await _context.PasswordResetTokens.FindAsync(id);
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var token = await context.PasswordResetTokens.FindAsync(id);
             if (token != null)
             {
-                _context.PasswordResetTokens.Remove(token);
-                await _context.SaveChangesAsync();
+                context.PasswordResetTokens.Remove(token);
+                await context.SaveChangesAsync();
             }
         }
     }

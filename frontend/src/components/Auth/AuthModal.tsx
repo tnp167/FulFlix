@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalTrigger,
-} from "@/components/ui/animated-modal";
-import Socials from "./Social";
+import { Modal, ModalBody, ModalTrigger } from "@/components/ui/animated-modal";
 import Login from "./Login";
 import SignUp from "./SignUp";
 
@@ -25,7 +19,7 @@ const AuthModal = () => {
         </ModalTrigger>
 
         <ModalTrigger
-          onClick={() => setType("signup")}
+          onClick={() => setType("login")}
           className="p-[3px] relative"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-secondary to-orange-500 rounded-lg" />
@@ -37,9 +31,6 @@ const AuthModal = () => {
         <ModalBody>
           {type && type === "login" && <Login setModalType={setType} />}
           {type && type === "signup" && <SignUp setModalType={setType} />}
-          <ModalFooter>
-            <Socials />
-          </ModalFooter>
         </ModalBody>
       </Modal>
     </div>
