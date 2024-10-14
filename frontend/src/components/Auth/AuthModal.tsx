@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Modal, ModalBody, ModalTrigger } from "@/components/ui/animated-modal";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import ResetPassword from "./ResetPassword";
-import NewPassword from "./NewPassword";
 
 const AuthModal = () => {
-  const [type, setType] = useState<
-    "signup" | "login" | "resetPassword" | "newPassword" | null
-  >(null);
+  const [type, setType] = useState<"signup" | "login" | "resetPassword" | null>(
+    null
+  );
   return (
     <div className="bg-primary gap-[20px] text-lg font-medium transition-all flex items-center justify-center">
       <Modal>
@@ -36,7 +35,6 @@ const AuthModal = () => {
           {type === "login" && <Login setModalType={setType} />}
           {type === "signup" && <SignUp setModalType={setType} />}
           {type === "resetPassword" && <ResetPassword setModalType={setType} />}
-          {type === "newPassword" && <NewPassword setModalType={setType} />}
         </ModalBody>
       </Modal>
     </div>

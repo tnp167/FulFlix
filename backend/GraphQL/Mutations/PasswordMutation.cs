@@ -32,7 +32,7 @@ namespace backend.GraphQL.Mutations
         {
             var domain = Environment.GetEnvironmentVariable("DOMAIN_URL");
             var token = Guid.NewGuid().ToString();
-            var resetLink = $"https://{domain}/reset-password?token={token}";
+            var resetLink = $"{domain}/reset-password?token={token}";
 
             var resetToken = new PasswordResetToken
             {

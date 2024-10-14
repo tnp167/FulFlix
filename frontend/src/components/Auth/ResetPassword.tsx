@@ -15,9 +15,7 @@ const ResetPassword = ({
   setModalType,
 }: {
   setModalType: React.Dispatch<
-    React.SetStateAction<
-      "signup" | "login" | "resetPassword" | "newPassword" | null
-    >
+    React.SetStateAction<"signup" | "login" | "resetPassword" | null>
   >;
 }) => {
   const [isEmailSent, setIsEmailSent] = useState(false);

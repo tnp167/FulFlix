@@ -1,3 +1,4 @@
+using System.Net.Http;
 using System.Net.Http.Headers;
 using AutoMapper;
 using backend.Data;
@@ -77,11 +78,8 @@ builder
 
 builder.Services.AddHttpClient<IAuth0Client, Auth0Client>(client =>
 {
+    var auth0Domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN");
     client.BaseAddress = new Uri($"https://{auth0Domain}/");
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-        "Bearer",
-        managementApiToken
-    );
     client.DefaultRequestHeaders.Accept.Add(
         new MediaTypeWithQualityHeaderValue("application/json")
     );

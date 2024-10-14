@@ -57,7 +57,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
               placeholder={placeholder}
               type={type}
               {...field}
-              className="text-base"
+              className="text-base text-secondary"
             />
           </FormControl>
         </div>

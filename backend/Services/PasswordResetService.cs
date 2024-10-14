@@ -1,25 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using backend.Interfaces;
-using Resend;
-using Newtonsoft.Json;
 using System.Text;
+using System.Threading.Tasks;
+using backend.Interfaces;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Resend;
 
 namespace backend.Services
 {
     public class PasswordResetService : IPasswordResetService
     {
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly IResend _resend;
-
         private readonly IAuth0Client _auth0Client;
-        public PasswordResetService(HttpClient httpClient, IResend resend, IAuth0Client auth0Client)
+
+        public PasswordResetService(
+            IHttpClientFactory httpClientFactory,
+            IResend resend,
+            IAuth0Client auth0Client
+        )
         {
-            _httpClient = httpClient;
+            _httpClientFactory = httpClientFactory;
             _resend = resend;
             _auth0Client = auth0Client;
         }
@@ -28,22 +33,32 @@ namespace backend.Services
         {
             var auth0Domain = Environment.GetEnvironmentVariable("AUTH0_DOMAIN")!;
             var auth0Token = await _auth0Client.GetManagementApiTokenAsync();
-            var request = new HttpRequestMessage(HttpMethod.Patch, $"https://{auth0Domain}/api/v2/users/{auth0Id}");
+
+            using var client = _httpClientFactory.CreateClient();
+            var request = new HttpRequestMessage(
+                HttpMethod.Patch,
+                $"https://{auth0Domain}/api/v2/users/{auth0Id}"
+            );
             request.Headers.Add("Authorization", $"Bearer {auth0Token}");
 
             var body = new
             {
                 password = newPassword,
-                connection = "Username-Password-Authentication"
+                connection = "Username-Password-Authentication",
             };
 
-            request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
+            request.Content = new StringContent(
+                JsonConvert.SerializeObject(body),
+                Encoding.UTF8,
+                "application/json"
+            );
 
-            var response = await _httpClient.SendAsync(request);
+            var response = await client.SendAsync(request);
             return response.IsSuccessStatusCode;
         }
 
-        public async Task SendPasswordResetEmail(string email, string resetLink){
+        public async Task SendPasswordResetEmail(string email, string resetLink)
+        {
             var message = new EmailMessage();
             message.From = "onboarding@resend.dev";
             message.To.Add(email);
