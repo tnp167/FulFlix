@@ -7,8 +7,6 @@ import CustomFormField from "../CustomFormfield";
 import { FormFieldType } from "@/types/formFieldType";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
 import { LoginSchema } from "@/types/login-schema";
 import { LOGIN } from "@/graphql/mutations/authMutation";
 import { useMutation } from "@apollo/client";
@@ -18,7 +16,11 @@ import { setUser } from "@/redux/userSlice";
 const Login = ({
   setModalType,
 }: {
-  setModalType: React.Dispatch<React.SetStateAction<"signup" | "login" | null>>;
+  setModalType: React.Dispatch<
+    React.SetStateAction<
+      "signup" | "login" | "resetPassword" | "newPassword" | null
+    >
+  >;
 }) => {
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<Eye />);
@@ -113,9 +115,12 @@ const Login = ({
             </span>
           </div>
 
-          <Button className="flex justify-end  px-0 text-secondary" asChild>
-            <Link to="">Forgot your password?</Link>
-          </Button>
+          <button
+            onClick={() => setModalType("resetPassword")}
+            className="flex justify-end px-0 text-secondary"
+          >
+            Forgot your password?
+          </button>
           <button
             type="submit"
             className=" inline-flex w-full h-14 animate-shimmer items-center justify-center rounded-md border border-none bg-[linear-gradient(110deg,#5e2a8b,45%,#7d3f8c,55%,#5e2a8b)] bg-[length:200%_100%] px-6 font-medium text-secondary  focus:outline-none transition-all custom-box"

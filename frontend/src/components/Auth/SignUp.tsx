@@ -21,7 +21,11 @@ import { AnimatePresence, motion } from "framer-motion";
 const SignUp = ({
   setModalType,
 }: {
-  setModalType: React.Dispatch<React.SetStateAction<"signup" | "login" | null>>;
+  setModalType: React.Dispatch<
+    React.SetStateAction<
+      "signup" | "login" | "resetPassword" | "newPassword" | null
+    >
+  >;
 }) => {
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(<Eye />);
@@ -234,7 +238,8 @@ const SignUp = ({
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.75 }}
+            exit={{ opacity: 0 }}
           >
             <Lottie className="h-48 pt-8" animationData={success} />
             <h1 className="pt-10 pb-10 text-3xl font-normal text-[#7ee857] text-center">

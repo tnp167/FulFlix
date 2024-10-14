@@ -43,3 +43,15 @@ export const LOGIN = gql`
     loginUser(loginUserDto: { email: $email, password: $password })
   }
 `;
+
+export const SEND_RESET_PASSWORD = gql`
+  mutation SendResetPassword($email: String!) {
+    sendResetPassword(email: $email)
+  }
+`;
+
+export const RESET_PASSWORD = gql`
+  mutation ResetPassword($newPassword: String!, $token: String!) {
+    passwordReset(token: $token, newPassword: $newPassword)
+  }
+`;
