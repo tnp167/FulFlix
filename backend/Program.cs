@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Resend;
 
@@ -50,8 +51,6 @@ builder
     .AddAuthorization()
     .AddQueryType(d => d.Name("Query"))
     .AddType<UserQuery>()
-    .AddType<EmailQuery>()
-    .AddType<PasswordQuery>()
     .AddMutationType(d => d.Name("Mutation"))
     .AddType<UserMutation>()
     .AddType<EmailMutation>()
@@ -92,7 +91,7 @@ builder.Services.Configure<ResendClientOptions>(o =>
 {
     o.ApiToken = Environment.GetEnvironmentVariable("RESEND_API_TOKEN")!;
 });
-builder.Services.AddTransient<IResend, ResendClient>();
+builder.Services.AddSingleton<IResend, ResendClient>();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -104,10 +103,17 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<ResendClient>(sp =>
+{
+    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+    var httpClient = httpClientFactory.CreateClient();
+    var resendOptions = sp.GetRequiredService<IOptions<ResendClientOptions>>();
+    return new ResendClient(resendOptions, httpClient);
+});
 builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IEmailTokenRepository, EmailTokenRepository>();
 builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
 builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
+builder.Services.AddScoped<IEmailTokenRepository, EmailTokenRepository>();
 
 var app = builder.Build();
 

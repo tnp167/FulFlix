@@ -38,6 +38,12 @@ export const SEND_VERIFICATION_EMAIL = gql`
   }
 `;
 
+export const VERIFY_EMAIL = gql`
+  mutation VerifyEmail($token: String!) {
+    verifyEmail(token: $token)
+  }
+`;
+
 export const LOGIN = gql`
   mutation Login($email: String!, $password: String!) {
     loginUser(loginUserDto: { email: $email, password: $password })

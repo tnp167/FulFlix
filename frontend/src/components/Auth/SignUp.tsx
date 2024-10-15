@@ -64,7 +64,7 @@ const SignUp = ({
       console.log("User created successfully:", data.createUser);
       setErrorMessage("");
       dispatch(setUser(data.createUser));
-      setIsRegistered(true);
+      //setIsRegistered(true);
     },
     onError(err) {
       console.error("Error signing up:", err);

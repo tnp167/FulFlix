@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal, ModalBody, ModalTrigger } from "@/components/ui/animated-modal";
 import Login from "./Login";
 import SignUp from "./SignUp";
-import ResetPassword from "./ResetPassword";
+import ResetPassword from "./RequestPasswordReset";
 
 const AuthModal = () => {
   const [type, setType] = useState<"signup" | "login" | "resetPassword" | null>(

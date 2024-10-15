@@ -15,17 +15,17 @@ namespace backend.Services
     public class PasswordResetService : IPasswordResetService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IResend _resend;
+        private readonly ResendClient _resendClient;
         private readonly IAuth0Client _auth0Client;
 
         public PasswordResetService(
             IHttpClientFactory httpClientFactory,
-            IResend resend,
+            ResendClient resendClient,
             IAuth0Client auth0Client
         )
         {
             _httpClientFactory = httpClientFactory;
-            _resend = resend;
+            _resendClient = resendClient;
             _auth0Client = auth0Client;
         }
 
@@ -59,13 +59,24 @@ namespace backend.Services
 
         public async Task SendPasswordResetEmail(string email, string resetLink)
         {
-            var message = new EmailMessage();
-            message.From = "onboarding@resend.dev";
-            message.To.Add(email);
-            message.Subject = "FulFlix - Reset Password Token";
-            message.HtmlBody = $"<p> Click to <a href=\"{resetLink}\">reset your password</a></p>";
+            var message = new EmailMessage
+            {
+                From = "your-verified-sender@example.com", // Use a verified sender email
+                To = email,
+                Subject = "FulFlix - Reset Password Token",
+                HtmlBody = $"<p>Click to <a href=\"{resetLink}\">reset your password</a></p>",
+            };
 
-            await _resend.EmailSendAsync(message);
+            try
+            {
+                await _resendClient.EmailSendAsync(message);
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                Console.WriteLine($"Error sending password reset email: {ex}");
+                throw;
+            }
         }
     }
 }

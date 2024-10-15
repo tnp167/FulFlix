@@ -11,7 +11,7 @@ import { ResetPasswordSchema } from "@/types/resetPassword-schema";
 import { ModalContent } from "@/components/ui/animated-modal";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-const ResetPassword = ({
+const RequestPasswordReset = ({
   setModalType,
 }: {
   setModalType: React.Dispatch<
@@ -100,4 +100,4 @@ const ResetPassword = ({
   );
 };
 
-export default ResetPassword;
+export default RequestPasswordReset;
