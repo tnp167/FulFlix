@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import AuthModal from "../Auth/AuthModal";
+
 type linkProps = {
   name: string;
   path: string;
@@ -39,7 +40,7 @@ const MobileNav = ({ links }: { links: linkProps[] }) => {
               </span>
             );
           })}
-          <div className="mt-10 flex flex-col gap-[50px]">
+          <div className="mt-10">
             <AuthModal />
           </div>
         </nav>

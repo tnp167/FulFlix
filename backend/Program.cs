@@ -4,7 +4,6 @@ using AutoMapper;
 using backend.Data;
 using backend.GraphQL;
 using backend.GraphQL.Mutations;
-using backend.GraphQL.Queries;
 using backend.Interfaces;
 using backend.Repositories;
 using backend.Services;

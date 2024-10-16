@@ -19,4 +19,8 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+export const clearApolloCache = () => {
+  client.resetStore();
+};
+
 export default client;

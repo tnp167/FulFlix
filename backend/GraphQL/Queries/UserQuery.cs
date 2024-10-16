@@ -1,24 +1,25 @@
-using HotChocolate;
-using HotChocolate.Authorization; 
-using System.Threading.Tasks;
-using backend.Interfaces;
-using backend.Services;
-using backend.DTOs;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using backend.DTOs;
+using backend.Interfaces;
+using HotChocolate;
+using HotChocolate.Authorization;
 
-namespace backend.GraphQL{
-
+namespace backend.GraphQL
+{
     [ExtendObjectType("Query")]
     public class UserQuery
     {
-        private readonly IUserService _userService; 
+        private readonly IUserService _userService;
+
         public UserQuery(IUserService userService)
         {
             _userService = userService;
         }
 
         [GraphQLName("user")]
-        public async Task<UserDto?> GetUserProfile([Service] IUserService userService, ClaimsPrincipal claimsPrincipal)
+        [Authorize]
+        public async Task<UserDto?> GetUserProfile(ClaimsPrincipal claimsPrincipal)
         {
             var auth0Id = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (auth0Id == null)
@@ -26,8 +27,7 @@ namespace backend.GraphQL{
                 throw new Exception("Invalid token.");
             }
 
-            return await userService.GetUserProfileAsync(auth0Id);
+            return await _userService.GetUserProfileAsync(auth0Id);
         }
     }
-
 }

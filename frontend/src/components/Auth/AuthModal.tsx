@@ -3,11 +3,20 @@ import { Modal, ModalBody, ModalTrigger } from "@/components/ui/animated-modal";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import ResetPassword from "./RequestPasswordReset";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import UserMenu from "./UserMenu";
 
 const AuthModal = () => {
   const [type, setType] = useState<"signup" | "login" | "resetPassword" | null>(
     null
   );
+  const user = useSelector((state: RootState) => state.user.user);
+
+  if (user) {
+    return <UserMenu />;
+  }
+
   return (
     <div className="bg-primary gap-[20px] text-lg font-medium transition-all flex items-center justify-center">
       <Modal>

@@ -9,7 +9,7 @@ type linkProps = {
 const Nav = ({ links }: { links: linkProps[] }) => {
   const location = useLocation();
   return (
-    <nav className="text-secondary flex gap-[50px] text-lg">
+    <nav className="text-secondary flex gap-[50px] text-lg items-center">
       {links?.map((link, index) => {
         return (
           <Link
@@ -24,7 +24,7 @@ const Nav = ({ links }: { links: linkProps[] }) => {
           </Link>
         );
       })}
-      <div className="ml-5 flex gap-[20px]">
+      <div className="ml-5">
         <AuthModal />
       </div>
     </nav>

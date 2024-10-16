@@ -12,6 +12,8 @@ import { LOGIN } from "@/graphql/mutations/authMutation";
 import { useMutation } from "@apollo/client";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/redux/userSlice";
+import { useLazyQuery } from "@apollo/client";
+import { GET_USER_PROFILE } from "@/graphql/queries/authQueries";
 
 const Login = ({
   setModalType,
@@ -52,7 +54,7 @@ const Login = ({
   const [login, { loading }] = useMutation(LOGIN, {
     onCompleted(data) {
       localStorage.setItem("authToken", data.loginUser);
-      dispatch(setUser({ token: data.loginUser }));
+      refetchUserProfile();
     },
     onError(error) {
       const errorMessage =
@@ -71,12 +73,34 @@ const Login = ({
   const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
     setErrorMessage("");
     try {
-      console.log("Form submitted:", data);
-      await login({
-        variables: data,
-      });
+      const result = await login({ variables: data });
+      if (result.data?.loginUser) {
+        localStorage.setItem("authToken", result.data.loginUser);
+        await refetchUserProfile();
+      }
     } catch (error) {
       console.error("Form submission error:", error);
+      setErrorMessage(
+        "Login failed. Please check your credentials and try again."
+      );
+    }
+  };
+
+  const [getUserProfile] = useLazyQuery(GET_USER_PROFILE, {
+    onCompleted: (data) => {
+      console.log("User profile data:", data.user);
+      dispatch(setUser(data.user));
+    },
+    onError: (error) => {
+      console.error("Error fetching user profile:", error);
+    },
+  });
+
+  const refetchUserProfile = async () => {
+    try {
+      await getUserProfile();
+    } catch (error) {
+      console.error("Error refetching user profile:", error);
     }
   };
 
