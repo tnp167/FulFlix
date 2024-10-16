@@ -8,6 +8,14 @@ import client, { clearApolloCache } from "./apolloClient";
 import store from "./redux/store";
 import VerifyEmail from "./pages/VerifyEmail";
 import ResetPassword from "./pages/ResetPassword";
+import { Toaster } from "sonner";
+
+const Layout = ({ children }: { children: React.ReactNode }) => (
+  <>
+    <Header />
+    {children}
+  </>
+);
 
 const AppWithApollo = () => {
   store.subscribe(() => {
@@ -18,9 +26,16 @@ const AppWithApollo = () => {
 
   return (
     <Router>
-      <Header />
+      <Toaster position="bottom-right" richColors toastOptions={{}} />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <Layout>
+              <Home />
+            </Layout>
+          }
+        />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
       </Routes>

@@ -1,19 +1,19 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-// import { logout } from "@/redux/userSlice";
+import { logout } from "@/redux/userSlice";
 
 const UserMenu = () => {
   const [isOpen, setIsOpen] = useState(true);
-  //   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.user);
 
   console.log("User data in UserMenu:", user);
 
-  //   const handleLogout = () => {
-  //     dispatch(logout());
-  //     setIsOpen(false);
-  //   };
+  const handleLogout = () => {
+    dispatch(logout());
+    setIsOpen(false);
+  };
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -26,7 +26,7 @@ const UserMenu = () => {
         onClick={toggleMenu}
       />
 
-      {/* <div className="absolute right-0 mt-2 w-48 bg-primary rounded-md shadow-lg py-1">
+      <div className="absolute right-0 mt-2 w-48 bg-primary rounded-md shadow-lg py-1">
         <div className="px-4 py-2 text-sm text-secondary">
           {user?.firstName} {user?.lastName}
         </div>
@@ -36,7 +36,7 @@ const UserMenu = () => {
         >
           Logout
         </button>
-      </div> */}
+      </div>
     </div>
   );
 };
