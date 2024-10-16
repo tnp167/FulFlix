@@ -9,7 +9,7 @@ import { NewPasswordSchema } from "@/types/newPassword-schema";
 import { useMutation } from "@apollo/client";
 import { RESET_PASSWORD } from "@/graphql/mutations/authMutation";
 import { Eye, EyeOff } from "lucide-react";
-import { useLocation, useNavigate, Outlet } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Vortex } from "@/components/ui/vortex";
 import { AnimatePresence, motion } from "framer-motion";
 import Lottie from "lottie-react";
@@ -183,7 +183,6 @@ const ResetPassword = () => {
           </div>
         </Vortex>
       </div>
-      <Outlet />
     </>
   );
 };

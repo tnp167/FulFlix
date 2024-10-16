@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, Outlet } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { VERIFY_EMAIL } from "@/graphql/mutations/authMutation";
 import { Vortex } from "@/components/ui/vortex";
@@ -104,7 +104,6 @@ const VerifyEmail = () => {
           </div>
         </Vortex>
       </div>
-      <Outlet />
     </>
   );
 };

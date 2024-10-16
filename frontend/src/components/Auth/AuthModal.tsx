@@ -5,15 +5,19 @@ import SignUp from "./SignUp";
 import ResetPassword from "./RequestPasswordReset";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import UserMenu from "./UserMenu";
+import UserMenu from "../Header/UserMenu";
 
-const AuthModal = () => {
+interface AuthModalProps {
+  showUserMenu?: boolean;
+}
+
+const AuthModal = ({ showUserMenu = true }: AuthModalProps) => {
   const [type, setType] = useState<"signup" | "login" | "resetPassword" | null>(
     null
   );
   const user = useSelector((state: RootState) => state.user.user);
 
-  if (user) {
+  if (user && showUserMenu) {
     return <UserMenu />;
   }
 
