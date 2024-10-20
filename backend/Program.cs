@@ -113,8 +113,17 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
 builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
 builder.Services.AddScoped<IEmailTokenRepository, EmailTokenRepository>();
+builder.Services.AddScoped<ITmdbService, TmdbService>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var dbContext = services.GetRequiredService<ApplicationDbContext>();
+    var tmdbService = services.GetRequiredService<ITmdbService>();
+    await dbContext.SeedDataAsync(tmdbService);
+}
 
 if (app.Environment.IsDevelopment())
 {

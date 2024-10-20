@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -93,6 +94,172 @@ namespace backend.Data
                     .WithMany(t => t.Showtimes)
                     .HasForeignKey(s => s.TheatreId);
             });
+        }
+
+        public async Task SeedDataAsync(ITmdbService tmdbService)
+        {
+            if (!Users.Any())
+            {
+                var users = new List<User>
+                {
+                    new User
+                    {
+                        Auth0Id = "auth0|1234567890",
+                        FirstName = "Admin",
+                        LastName = "User",
+                        Email = "admin@example.com",
+                        EmailVerified = true,
+                        Roles = new List<Role> { Role.Admin, Role.User },
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow,
+                    },
+                    new User
+                    {
+                        Auth0Id = "auth0|0987654321",
+                        FirstName = "Regular",
+                        LastName = "User",
+                        Email = "user@example.com",
+                        EmailVerified = true,
+                        Roles = new List<Role> { Role.User },
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow,
+                    },
+                };
+
+                Users.AddRange(users);
+                await SaveChangesAsync();
+            }
+
+            if (!Cinemas.Any())
+            {
+                var cinemas = new List<Cinema>
+                {
+                    new Cinema
+                    {
+                        Name = "Fulflix Shoreditch",
+                        Location = "Shoreditch",
+                        Theatres = new List<Theatre>(),
+                    },
+                    new Cinema
+                    {
+                        Name = "Fulflix Paddington",
+                        Location = "Paddington",
+                        Theatres = new List<Theatre>(),
+                    },
+                    new Cinema
+                    {
+                        Name = "Fulflix Manchester",
+                        Location = "Manchester",
+                        Theatres = new List<Theatre>(),
+                    },
+                    new Cinema
+                    {
+                        Name = "Fulflix Birmingham",
+                        Location = "Birmingham",
+                        Theatres = new List<Theatre>(),
+                    },
+                    new Cinema
+                    {
+                        Name = "Fulflix Nottingham",
+                        Location = "Nottingham",
+                        Theatres = new List<Theatre>(),
+                    },
+                };
+                Cinemas.AddRange(cinemas);
+                await SaveChangesAsync();
+
+                foreach (var cinema in cinemas)
+                {
+                    var theatres = new List<Theatre>
+                    {
+                        new Theatre
+                        {
+                            CinemaId = cinema.Id,
+                            ScreenNumber = 1,
+                            Rows = 10,
+                            Columns = 15,
+                            Cinema = cinema,
+                        },
+                        new Theatre
+                        {
+                            CinemaId = cinema.Id,
+                            ScreenNumber = 2,
+                            Rows = 8,
+                            Columns = 12,
+                            Cinema = cinema,
+                        },
+                        new Theatre
+                        {
+                            CinemaId = cinema.Id,
+                            ScreenNumber = 3,
+                            Rows = 12,
+                            Columns = 15,
+                            Cinema = cinema,
+                        },
+                    };
+                    Theatres.AddRange(theatres);
+                }
+                await SaveChangesAsync();
+
+                foreach (var theatre in Theatres)
+                {
+                    var seats = new List<Seat>();
+                    for (int row = 1; row <= theatre.Rows; row++)
+                    {
+                        for (int col = 1; col <= theatre.Columns; col++)
+                        {
+                            seats.Add(
+                                new Seat
+                                {
+                                    TheatreId = theatre.Id,
+                                    Row = row,
+                                    Column = col,
+                                    Theatre = theatre,
+                                }
+                            );
+                        }
+                    }
+                    Seats.AddRange(seats);
+                }
+                await SaveChangesAsync();
+            }
+
+            if (!Movies.Any())
+            {
+                var movies = await tmdbService.GetNowPlayingMoviesAsync();
+                Movies.AddRange(movies);
+                await SaveChangesAsync();
+
+                var random = new Random();
+                foreach (var movie in movies)
+                {
+                    foreach (var theatre in Theatres)
+                    {
+                        for (int i = 0; i < 5; i++)
+                        {
+                            var startTime = DateTime
+                                .Now.AddDays(random.Next(1, 30))
+                                .AddHours(random.Next(10, 23))
+                                .AddMinutes(random.Next(0, 60));
+
+                            var endTime = startTime.AddMinutes(movie.Runtime);
+                            Showtimes.Add(
+                                new Showtime
+                                {
+                                    MovieId = movie.Id,
+                                    TheatreId = theatre.Id,
+                                    StartTime = startTime,
+                                    EndTime = endTime,
+                                    Price = random.Next(10, 20),
+                                    Movie = movie,
+                                    Theatre = theatre,
+                                }
+                            );
+                        }
+                    }
+                }
+                await SaveChangesAsync();
+            }
         }
 
         public override void Dispose() { }
